@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+            
+            
+	<beans:bean id="tv" class="com.yedam.app.spring.TV"></beans:bean>
+	
+	
+	<!-- DI(의존성 주입) : XML 방식 -->
+	<!-- 개발자(나)가 만들어 놓은 클래스(Restaurant)를 xml로 덮어씌어서 제어하려고 하는 것. -->
+	<!-- 스프링은 기본 생성자를 생성하고 호출한다. -->
+	<!-- 선언된 변수명과 id명이 같을 경우 출동 발생할 수 있다. -->
+ 	<beans:bean id="idchef" class="com.yedam.app.xml.Chef" />
+	<beans:bean class="com.yedam.app.xml.Restaurant">
+		<!--생성자 인젝션 / ref : reference 참조
+		감싸고 있는 bean 태그의 클래스 속성의 주소로 찾아가서 생성자를 호출하겠다. -->
+		<constructor-arg ref="idchef" />
+		
+		<!--세터 인젝션 / name : 필드명
+		name을 기반으로 세터 호출, 있으면 내가 들고 있는 빈에 집어 넣는다. -->
+		<property name="chef" ref="idchef" />
+	</beans:bean>
+	
+	
+	<!-- DI : 어노테이션 방식 -->
+	<!-- 직접 어노테이션을 걸어주고 난 후 scan -->
+	<!-- 명시적인 선언 직관적 -->
+	<context:component-scan base-package="com.yedam.app.anotation" />
+	
+	<!-- DI : 자바 베이스 방식 -->
+	<context:component-scan base-package="com.yedam.app.javabase" />
+	
+	
+</beans>

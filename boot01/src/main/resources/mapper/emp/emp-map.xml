@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.app.emp.mapper.EmpMapper">
+	<!-- 마이바티스의 장점:sql문을 그대로 사ㅛ용할 수 있다. -->
+	
+	<!-- 전제 조회 -->
+	<!-- 파라미터 타입은 굳이 안 써도 된다, resultType은 변수명을 써주면 된다. -->
+	<!-- order by 꼭! -->
+	<!-- 마이바티스에서의 규칙 대문자로 구분 -->
+	<select id="selectEmpAllList" resultType="EmpVO">
+		SELECT   employee_id,
+				 first_name,
+				 last_name,
+				 email,
+				 phone_number,
+				 hire_date,
+				 job_id,
+				 salary,
+				 commission_pct,
+				 manager_id,
+				 department_id
+		FROM     employees
+		<!-- Dynamic sql : 검색할 때 많이 사용
+		     원래는 where 태그 없이 사용가능하지만 <where>을 사용하면 조건에 맞지 않으면 where 절 생상 안 함 -->
+	     <!-- OR은 자동 처리 -->
+	     <!-- test 속성에는 자바의 필드명이 들어가야 된다.  -->
+	     <!-- int의 초기값은 0이다. 그래서 0을 넘겨주면 값이 없다는 것과 같다. 그래서 int 값을 체크할 때엔 아래처럼 해주면 된다. -->
+	     <!-- String은 참조 타입, 그래서 null로 비교, ____.equals('') 공백체크 -->
+	     <!-- 데이터 타입에 따라 다르게 조건문을 적어주어야 한다. -->
+	     <!-- input태그에 아무값도 입력하지 않으면 공백임 -->
+		<where>
+			<if test="departmentId > 0">
+				OR department_id = #{departmentId}			
+			</if>
+			<if test="jobId != null and jobId.equals('')">
+				OR job_id = #{jobId}
+			</if>		
+		</where>
+		<!-- 살아남는 태그가 있으면 -->
+		<!-- where department_id = 100 -->
+		ORDER BY employee_id
+	</select>
+	
+	
+	<!-- 단건 조회 -->
+	<!-- 리턴타입이 하나면 결과는 무조건 하나 -->
+	<select id="selectEmpInfo" resultType="EmpVO">
+		
+		SELECT   employee_id,
+		         first_name,
+		         last_name,
+		         email,
+		         phone_number,
+		         hire_date,
+		         job_id,
+		         salary,
+		         commission_pct,
+		         manager_id,
+		         department_id
+		FROM     employees
+		WHERE    employee_id = #{employeeId}
+		<!-- #{} : PreparedStatement => 데이터 타입에 따른 작업 
+			 ${} : Statement         => 데이터 타입 상관하지 않음 -->
+	</select>
+	
+	
+	<!-- 등록 -->
+	<insert id="insertEmpInfo" parameterType="EmpVO">
+		<!-- <selectKey> : select문 / insert, update에서만 쓸 수 있는 서브태그 -->
+		<!-- 그룹함수가 빈 테이블에 대해서는 널값을 부여하기 때문에 NVL 함수를 사용해준다. -->
+		<!-- 실행이 되면parameterType에 담긴다.-->
+		<selectKey keyProperty="employeeId"
+				   resultType="Integer"
+				   order="BEFORE">
+				   SELECT NVL(MAX(employee_id), 0) + 1
+				   FROM   employees
+		</selectKey>
+		INSERT INTO employees (			
+								employee_id
+							  , last_name
+						      , email
+						      , hire_date
+						      , job_id
+						        <!-- 체크 제약 조건이 있을 경우 다이나믹 sql을 통해서 설정해주어여ㅑ 한다. -->
+					         <if test="salary > 0">
+					         <!-- 조건이 충족되지 않이면 if문 안에 행이 사라지기 때문에 ,쉼표를 앞에 둔다 -->
+						      , salary
+					         </if>
+							  )
+		VALUES (
+				  #{employeeId}
+				, #{lastName}
+				, #{email}
+				<!-- choose(다중조건문)는 어떤 경우에도 값을 가지기 때문에 컬럼은 건들지 않는다.-->
+				<!-- when = if / otherwise = else -->
+				<choose>
+					<when test="hireDate != null">
+					, #{hireDate}
+					</when>
+					<otherwise>
+					, sysdate
+					</otherwise>
+				</choose>
+				, #{jobId}
+				<if test="salary > 0">
+				, #{salary}
+				</if>
+		       )
+	</insert>
+	
+	
+	<!-- 수정 -->
+	<!-- 매개변수가 두개이상일 경우 @Params(아파치 거) 사용 -->
+	<!-- @Param(emp) => 넘어오는 매개변수가 두개이상(id, emp)일 경우 emp.~ 작성 -->
+	<update id="updateEmpInfo">
+		UPDATE employees  
+		SET    last_name = #{emp.lastName}
+			   , job_id = #{emp.jobId}
+			   <if test="emp.salary > 0">
+			   , salary = #{emp.salary}
+			   </if>
+		WHERE  employee_id = #{id}
+	</update>
+	
+	
+	<!-- 삭제 -->
+	<!-- 북수가 아니면 파라미터 타입 명시 안 해도 된다. -->
+	<delete id="deleteEmpInfo" parameterType="int">
+		<!--정확하게 데이터를 지징하기 위해서 프라이머리키를 가장 많이 사용 -->
+		<!-- mybatis의 특징 : 넘어오는 데이터가 하나밖에 없다면 이름이 달라도 괜찮다. -->
+		DELETE
+		FROM   employees
+		WHERE  employee_id = #{eid}	
+	</delete>
+	
+
+</mapper>

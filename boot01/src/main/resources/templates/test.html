@@ -6,9 +6,34 @@
 </head>
 <body>
 	<h1>타임리프 테스트</h1>
-	<!-- thymeleaf, 유일한 태그 (없는 태그라고 생각하면 된다.) -->
+	<!--/* thymeleaf, 유일한 태그 (없는 태그라고 생각하면 된다.) [[]]*/-->
 	<th:block th:each="num : ${ #numbers.sequence(1,5) }">
 		<p th:text="${num}" />
 	</th:block>
+	<!--/*  */-->
+
+
+	<!--/*
+		타임리프 기본 방식
+			1) th:속성="${}" 
+			2) th:src="@{}" or
+			   th:href="@{}" or
+			   th:action="@{}"     경로를 지정할 때엔 context-path를 지정해줘야 한다.  */-->
+
+
+	<!--/* # context-path : 프로젝트에 이름을 부여
+			 application.properties => server.servlet.context-path=/yedam 추가하면
+			 결과 http://127.0.0.1:8099/tymeleaf ->  http://127.0.0.1:8099/yedam/tymeleaf
+			
+			 배포를 할 때 context-path를 부여하게 되면 thymeleaf로 경로를 지정하지 않으면 오류가 뜬다.
+			 그래서 링크 표현식을 쓴다. */-->
+	<a href="/empList">html : 전체 조회</a>
+	<a th:href="@{/empList}" th:text="'thymeleaf : 전체 조회'"></a>
+	<hr>
+	<p>사원 정보 : [[ ${empInfo} ]]</p> <!-- 문자 + class -->
+	<p th:id="${empInfo.employeeId}"
+	   th:name="${empInfo.lastName}"
+	   th:text="${empInfo.jobId + ', ' + empInfo.deparmentId}" />
+	
 </body>
 </html>

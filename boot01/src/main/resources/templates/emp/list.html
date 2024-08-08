@@ -1,12 +1,56 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<meta name="contextPath" th:value="${contextPath}">
+<title>list.html</title>
+<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js" ></script>
 </head>
+
 <body>
-	<h1>전체 조회</h1>
-	
-	
+	<div>
+		<h3>전체 사원 조회</h3>
+		<table>
+			<thead>
+				<tr>
+					<th>No.</th>
+					<th>사번</th>
+					<th>이름</th>
+					<th>입사일</th>
+					<th>업무</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!-- 반복하고자 하는 태그 -->
+				<th:block th:each="emp, indexNo : ${emps}">
+					<!-- 속성을 이용하여 출력 -->
+					<!-- 템플릿 문법 이용하여 출력 -->
+					<!-- <tr th:onclick='|location.href="@{/empInfo?(employeeId=${emp.employeeId})}"|'> -->
+					<tr>
+						<td>[[ ${ indexNo.index + 1 } ]]</td>
+						<!-- index는 0부터, index + 1은 1부터 -->
+						<td th:text="${emp.employeeId}" />
+						<td>[[ ${ emp.firstName } ]]</td>
+						<td th:text="${#dates.format(emp.hireDate, 'yyyy년 MM월 dd일')}" />
+						<!--/* <td th:text="${emp.jobId}"></td> */-->
+						<td th:text="${emp.jobId}" />
+					</tr>
+				</th:block>
+			</tbody>
+		</table>
+	</div>
+
+	<script>
+		const context = $('meta[name="contextPath"]').attr('value');
+		$('tbody > tr').on('click', function(event) {
+			// currentTarget 활용하기. target은 고정값이다.
+			let tr = event.currentTarget;
+			let eid = $(event.currentTarget).children().eq(1).text(); //event.currentTarget가 자바스크릡트 문법이라서 제이쿼리 문법으로 바꿔준다.
+			let url = context + '/empInfo?employeeId=' + eid;
+			location.href = url;
+		});
+	</script>
 </body>
+
 </html>

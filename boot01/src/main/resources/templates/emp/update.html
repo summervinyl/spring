@@ -1,10 +1,94 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+	<meta charset="UTF-8">
+	<title>수정_update.html</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
+
 <body>
-	<h1>수정</h1>
+	<!-- 폼 태그의 통신 기능 사용하지 않음 (액션, 메소트 ㄴㄴ) -->
+	<form name="updateForm" th:object="${emp}">
+		<h3>사원 정보 수정</h3>
+		<div>
+			<label for="eid">사원번호</label>
+			<input type="number" id="eid" th:field="*{employeeId}" readonly>
+		</div>
+		<div>
+			<label for="ename">이름</label>
+			<input type="text" id="ename" th:field="*{lastName}">
+		</div>
+		<div>
+			<label for="email">이메일</label>
+			<input type="email" id="email" th:field="*{email}">
+		</div>
+		<div>
+			<label for="hDate">입사일</label>
+			<input type="date" id="hDate" th:field="*{hireDate}" readonly>
+			<!-- input에 값을 출력할 때에는 VO에 설정한대로 출력 -->
+		</div>
+		<div>
+			<label for="job">업무</label>
+			<input type="text" id="job" th:field="*{jobId}">
+		</div>
+		<div>
+			<label for="sal">급여</label>
+			<input type="number" id="sal" th:field="*{salary}">
+		</div>
+		<div>
+			<button type="button" id="updateBtn">저장</button>
+		</div>
+	</form>
+
+	<script>
+		$('#updateBtn').on('click', upadateAjax);
+
+		function upadateAjax() {
+			// 1) 보낼 데이터 가져오기
+			let dataObj = getFormData();
+			console.log(dataObj);
+		
+
+			// 2) ajax - jquery의 아작스
+			// 서버에 값을 넘겨주기 때문에 ResponseBody가 동작한다.
+			$.ajax('empUpdate', { 	// 접근하고자 하는 컨트롤러의 경로
+				type : 'post',      // method
+				contentType : 'application/json', // 보낼 데이터의 타입
+				data : JSON.stringify(dataObj)
+				// ↓ body - 보낼 데이터가 쿼리스트링이면 객체 타입으로 보내주어야 한다.	
+				//data : dataObj
+			})
+			.done(result => {
+				console.log(result);
+			})
+			.fail(err => console.log(err));
+			
+			/* axios.post('empUpdate', (dataObj, dataObj.employeeId)).then(result => res.send(result)); */
+			
+		}
+
+		// serializeArray(); 폼 태그 내부에 있는 모든 입력 태그(name, value)를 배열로 리턴
+		// name이 key가 되어야 하고 value가 값이 되어야 해서 변환 작업이 필요하다.
+		function getFormData() {
+			let formAry = $('form[name="updateForm"]').serializeArray();
+			//console.log(formAry); // 배열
+			
+			// 배열을 내가 원하는 형태의 객체로 변환하기.
+			let formObj = {};
+			$.each(formAry, function(idx, tag){
+				//console.log(idx, tag);
+				//console.log('key : ', tag.name);
+				//console.log('value : ', tag.value);	
+				formObj[tag.name] = tag.value;
+			});
+			console.clear();
+			console.log(formObj);
+			return formObj;
+		}
+
+	</script>
 </body>
+
 </html>

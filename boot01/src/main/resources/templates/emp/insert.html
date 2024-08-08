@@ -1,10 +1,83 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+	<meta charset="UTF-8">
+	<title>등록_insert.html</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
+
 <body>
-	<h1>등록</h1>
+	<!-- http://localhost:8099/yedam/empInsert -->
+	<!-- name 속성은 쿼리스트링 키 값 : empInsertProcess의 VO 네임 지정 -->
+	<form name="insertForm" th:action="@{/empInsert}" method="post">
+		<h3>사원 정보 등록</h3>
+		<div>
+			<label for="ename">이름</label> <input type="text" id="ename" name="lastName">
+		</div>
+		<div>
+			<label for="email">이메일</label> <input type="email" id="email" name="email">
+		</div>
+		<div>
+			<label for="hDate">입사일</label> <input type="date" id="hDate" name="hireDate">
+		</div>
+		<div>
+			<label for="job">업무</label> <input type="text" id="job" name="jobId">
+		</div>
+		<div>
+			<label for="sal">급여</label> <input type="number" id="sal" name="salary">
+		</div>
+		<div>
+			<button type="submit">등록</button>
+		</div>
+	</form>
+
+	<script>
+		$('form[name="insertForm"]').on('submit', insertHandler);
+
+		function insertHandler() {
+			event.preventDefault();
+
+			let name = $('input[name="lastName"]');
+			if (name.val() == '') {
+				alert('이름을 입력해주세요.');
+				name.focus();
+				return;
+			}
+
+			let email = $('input[name="email"]');
+			if (email.val() == '') {
+				alert('이메일을 입력해주세요.');
+				email.focus();
+				return;
+			}
+
+			let hireDate = $('input[name="hireDate"]');
+			if (hireDate.val() == '') {
+				alert('입사일을 입력해주세요.');
+				hireDate.focus();
+				return;
+			}
+
+			let jobId = $('input[name="jobId"]');
+			if (jobId.val() == '') {
+				alert('업무를 입력해주세요.');
+				jobId.focus();
+				return;
+			}
+
+			let salary = $('input[name="salary"]');
+			if (salary.val() <= 0) {
+				alert('급여는 0 보다 커야합니다.');
+				salary.focus();
+				return;
+			}
+
+			insertForm.submit();
+		}
+
+
+	</script>
 </body>
+
 </html>

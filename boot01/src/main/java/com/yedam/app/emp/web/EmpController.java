@@ -18,7 +18,7 @@ import com.yedam.app.emp.service.EmpVO;
 			// 컨트롤러의 역할 = endpoint : URL + METHOD => SERVICE => VIEW | ex) url + get 요청 ->
 			// 서비스 연결 -> 화면 연결ㄴ
 public class EmpController {
-	// 컨트롤러는 서비스 연결, 그래서 해당 컨트롤러에서 제공하는 서비스
+	// 컨트롤러는 서비스 연결, 그래서 해당 컨트롤러에서 제공하는 서비스 연결해야 해.
 	private EmpService empService;
 
 	@Autowired
@@ -33,7 +33,7 @@ public class EmpController {
 
 	// # 전체 조회 : GET
 	// 사용자에가 받아야 할 데이터는 없지만 전달해줘야 할 데이터는 있다. 그것을 Model이라고 한다.
-	// Modelk = Request + Response
+	// Model = Request + Response
 	@GetMapping("empList") // http://localhost:8099/empList
 	private String empList(Model model) { // Response를 대신한다고 생각하면 된다.
 		// 1) 해당 기능 수행하기.
@@ -53,6 +53,7 @@ public class EmpController {
 
 	// # 단건 조회 : GET메소드를 이용할 때 QueryString을 사용해야 된다. QueryString (커맨드 객체, 리퀘스트 파람)
 	// 정할 때는 객체냐 단일값이냐를 생각하고 결정.
+	// 어노테이션이 없으면 커맨드 객체 : key=value 형태 / 결과를 보려면 http://localhost:8099/yedam/empInfo?employeeId=100
 	@GetMapping("empInfo") // http://localhost:8099/empInfo
 	private String empInfo(EmpVO empVO, Model model) { // 스프링이 알아서 VO를 만들어 준다.
 		// 1) 해당 기능 수행하기.
@@ -94,22 +95,22 @@ public class EmpController {
 	// 단건 조회와 수정 페이지는 형태가 같아서 같은 페이지에서 진행하는 경우도 많음
 	@GetMapping("empUpdate")
 	public String empUpdateForm(EmpVO empVO, Model model) {
-		EmpVO fiEmpVO = empService.empInfo(empVO);
-		model.addAttribute("emp", fiEmpVO);
+		EmpVO findVO = empService.empInfo(empVO);
+		model.addAttribute("emp", findVO);
 		return "emp/update";
 	}
 
 	// # 수정 - 처리 : AJAX 기반 => QeuryString으로 값 받기 -> 리턴 타입 위에 @ResponseBody 사용
 	// 수정이 연속으로 일어나는 경우가 많아서 redirect보다는 아작스를 활용. submit을 사용
 	// 데이터 처리 명령을 내려야 된다 -> ReponseBody
-	@PostMapping("empUpdate")
+	//@PostMapping("empUpdate")
 	@ResponseBody //AJAX 의미 - 리턴 타입 위에 붙는다.
 	public Map<String, Object> empUpdateAJAXQueryString(EmpVO empVO) {
 		return empService.empUpdate(empVO);
 	}
 
 	// # 수정 - 처리 : AJAX 기반 => JSON으로 값 받기 -> 매개변수에 @RequestBody 사용
-	//@PostMapping("empUpdate")
+	@PostMapping("empUpdate")
 	@ResponseBody //AJAX 의미 - 리턴 타입 위에 붙는다.
 	public Map<String, Object> empUpdateAJAXJSON(@RequestBody EmpVO empVO) { //매개변수 제이슨형태
 		return empService.empUpdate(empVO);
@@ -120,7 +121,7 @@ public class EmpController {
 	// 삭제는 아작스보다는 redirect 권장
 	// 아작스를 사용하면 데이터를 보내고 성공 리턴이면 화면에서 삭제된 대상을 지워야 한다.
 	@GetMapping("empDelete")
-	public String empDelete(Integer employeeId) {
+	public String empDelete(Integer employeeId) { // Integer 안에 필드가 존재하지 않음.
 		empService.empDelete(employeeId);
 		return "redirect:empList";
 	}

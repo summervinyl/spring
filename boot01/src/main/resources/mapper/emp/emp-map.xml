@@ -130,7 +130,7 @@
 		<!-- mybatis의 특징 : 넘어오는 데이터가 하나밖에 없다면 이름이 달라도 괜찮다. -->
 		DELETE
 		FROM   employees
-		WHERE  employee_id = #{eid}	
+		WHERE  employee_id = #{empId}	
 	</delete>
 	
 

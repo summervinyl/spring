@@ -71,7 +71,7 @@ public class ParamController {
 	
 	
 	// # @RequestBody : JSON 포맷, 배열 or 객체
-	// Method : POST, PUT
+	// Method : 반드시 POST, PUT 사용
 	// Content-Type : appliction/json
 	// 이상한 값이 들어가도 에러는 나지 않고 버려진다.
 	// 부메랑
@@ -85,7 +85,7 @@ public class ParamController {
 		result += "\t last_name " + empVO.getLastName();
 		return result;
 	}
-	// 2) @RequestBody : JSON 포맷 = 배열 형태로 보냄
+	// 2) @RequestBody : JSON 포맷 = 배열 형태로 보냄 / 사용자가 개발자에서 데이터를 JSON형태로 주어야 한다.
 	// [{ "employeeId" : "1000", "lastName" : "윤" }]
 	// [{ "employeeId" : "1000", "lastName" : "윤"}, { "employeeId" : "1000", "lastName" : "채" }]
 	@RequestMapping("resbodyList")

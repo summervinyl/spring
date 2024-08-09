@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+				xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+				layout:decorate="~{common/layouts/default_layout}"
+ 				layout:fragment="Content">
 
 <head>
 <meta charset="UTF-8">
 <meta name="contextPath" th:value="${contextPath}">
 <title>list.html</title>
-<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js" ></script>
+<!-- ~{} : fragment 표현식 / fragment 있는 파일 경로를 작성해야 한다. 단, View Resolver의 도움을 받기 때문에 그 점을 생각하고 작성하기. -->
+<!--／＊ <th:block th:replace="~{common/configs/default_config :: jQueryConfig}"/> ＊／-->
 </head>
 
 <body>

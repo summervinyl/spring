@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+				xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+				layout:decorate="~{common/layouts/default_layout}"
+ 				layout:fragment="Content">
 <head>
 <meta charset="UTF-8">
 <title>info.html</title>
@@ -9,7 +12,7 @@
 		<!-- EL1007E: Property or field 'employeeId' cannot be found on null : Where가 없음 -->
 		<!-- 어노테이션이 없다면 커맨드 객체 : http://localhost:8099/yedam/empInfo?employeeId=100 -->
 		<!-- 사원 번호를 기준으로 단건 조회를 하기로 작성했기 때문에 데이터를 넘겨줄 때는 위 방법으로 -->
-		<h3>사원 정보 조회</h3>
+		<h3 th:text="${emp.firstName}">정보 조회</h3><h3>정보 조회</h3>
 		<div>
 			<label for="eid">사원번호</label>
 			<input type="number" id="eid" th:value="${emp.employeeId}" readonly>

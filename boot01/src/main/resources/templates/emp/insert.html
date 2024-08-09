@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+				xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+				layout:decorate="~{common/layouts/default_layout}"
+ 				layout:fragment="Content">
 
 <head>
-	<meta charset="UTF-8">
-	<title>등록_insert.html</title>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<meta charset="UTF-8">
+<title>등록_insert.html</title>
+<!--／＊ <th:block th:replace="~{common/configs/default_config :: jQueryConfig}"/> ＊／-->
 </head>
 
 <body>
@@ -13,19 +16,23 @@
 	<form name="insertForm" th:action="@{/empInsert}" method="post">
 		<h3>사원 정보 등록</h3>
 		<div>
-			<label for="ename">이름</label> <input type="text" id="ename" name="lastName">
+			<label for="ename">이름</label> <input type="text" id="ename"
+				name="lastName">
 		</div>
 		<div>
-			<label for="email">이메일</label> <input type="email" id="email" name="email">
+			<label for="email">이메일</label> <input type="email" id="email"
+				name="email">
 		</div>
 		<div>
-			<label for="hDate">입사일</label> <input type="date" id="hDate" name="hireDate">
+			<label for="hDate">입사일</label> <input type="date" id="hDate"
+				name="hireDate">
 		</div>
 		<div>
 			<label for="job">업무</label> <input type="text" id="job" name="jobId">
 		</div>
 		<div>
-			<label for="sal">급여</label> <input type="number" id="sal" name="salary">
+			<label for="sal">급여</label> <input type="number" id="sal"
+				name="salary">
 		</div>
 		<div>
 			<button type="submit">등록</button>
@@ -75,8 +82,6 @@
 
 			insertForm.submit();
 		}
-
-
 	</script>
 </body>
 

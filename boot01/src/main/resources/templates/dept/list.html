@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="contextPath" th:value="${contextPath}">
+	<title>list.html</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+	<div>
+		<h3>부서 전체 조회</h3>
+		<table>
+			<thead>
+				<tr>
+					<th>No.</th>
+					<th>부서 번호</th>
+					<th>부서 이름</th>
+					<th>매니저ID</th>
+					<th>지역 번호</th>
+				</tr>
+			</thead>
+			<tbody>
+				<th:block th:each="dept, indexNo : ${depts}">
+					<tr>
+						<td>[[ ${ indexNo.index + 1 } ]]</td>
+						<td th:text="${dept.departmentId}" />
+						<td th:text="${dept.departmentName}" />
+						<td th:text="${dept.managerId}" />
+						<td th:text="${dept.locationId}" />
+					</tr>
+				</th:block>
+			</tbody>
+		</table>
+	</div>
+
+	<script>
+		const context = $('meta[name="contextPath"]').attr('value');
+		
+		$('tbody > tr').on('click', function(event) {
+			let tr = event.currentTarget;
+			let did = $(event.currentTarget).children().eq(1).text();
+			let url = context + '/deptInfo?departmentId=' + did;
+			location.href = url;
+		});
+	</script>
+</body>
+
+</html>

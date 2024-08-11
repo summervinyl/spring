@@ -29,7 +29,7 @@ class Boot01ApplicationTests {
 	// 메소드마다 독립적이라서, 순서대로 진행되지 않아.
 	// 테스트 안 하려면 @Test에만 주석 처리
 	// 전체 조회
-	//@Test
+	@Test
 	void empList() {
 		// 전체 조회의 결과를 null로 체크할 수 없다.
 		List<EmpVO> list = empMapper.selectEmpAllList();
@@ -73,7 +73,7 @@ class Boot01ApplicationTests {
 	}
 	
 	// 수정 테스트 : 수정 대상 조회 (단건 조회) => 수정하고 하는 내용 입력 => 업데이트 진행
-	@Test
+	//@Test
 	void empUpdate() {
 		// 1) 수정 대상 단건 조회
 		EmpVO empVO = new EmpVO();

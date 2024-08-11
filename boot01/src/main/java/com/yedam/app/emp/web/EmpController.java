@@ -34,7 +34,7 @@ public class EmpController {
 	// # 전체 조회 : GET
 	// 사용자에가 받아야 할 데이터는 없지만 전달해줘야 할 데이터는 있다. 그것을 Model이라고 한다.
 	// Model = Request + Response
-	@GetMapping("empList") // http://localhost:8099/empList
+	@GetMapping("empList") // http://localhost:8099/yedam/empList
 	private String empList(Model model) { // Response를 대신한다고 생각하면 된다.
 		// 1) 해당 기능 수행하기.
 		List<EmpVO> list = empService.empList();

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.app.dept.mapper.DeptMapper">
+	<!-- 전체 조회 -->
+	<select id="selectAllDeptList" resultType="DeptVO">
+		SELECT department_id,
+		       department_name,
+		       manager_id,
+		       location_id
+		FROM   departments
+	</select>
+
+	<!-- 단건 조회 -->
+	<select id="selectDeptInfo" resultType="DeptVO">
+		SELECT department_id,
+			   department_name,
+			   manager_id,
+			   location_id
+		FROM   departments
+		WHERE  department_id = #{departmentId}
+	</select>
+
+
+	<!-- 등록 -->
+	<insert id="insertDeptInfo" parameterType="DeptVO">
+		INSERT INTO departments (
+			department_id
+		  , department_name
+		  , manager_id
+		  , location_id
+		)
+		VALUES (
+			#{departmentId}
+		  , #{departmentName}
+		  ,	#{managerId}
+		  , #{locationId}
+		)
+	</insert>
+	
+	<!-- 수정 -->
+	<update id="updateDeptInfo">
+		UPDATE departments
+		SET    department_name = #{dept.departmentName}
+		WHERE  department_id = #{id}
+	</update>
+
+
+	<!-- 삭제 -->
+	<delete id="deleteDeptInfo" parameterType="int">
+		DELETE
+		FROM   departments
+		WHERE  department_id = #{deptId}
+	</delete>
+
+</mapper>

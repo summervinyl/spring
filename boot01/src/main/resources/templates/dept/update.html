@@ -1,43 +1,30 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
-				xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-				layout:decorate="~{common/layouts/default_layout}"
- 				layout:fragment="Content">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <head>
 <meta charset="UTF-8">
 <title>수정_update.html</title>
-<!--／＊ <th:block th:replace="~{common/configs/default_config :: jQueryConfig}"/> ＊／-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 
 <body>
-	<!-- 폼 태그의 통신 기능 사용하지 않음 (액션, 메소트 ㄴㄴ) -->
-	<form name="updateForm" th:object="${emp}">
-		<h3>사원 정보 수정</h3>
+	<form name="updateForm" th:object="${dept}">
+		<h3>부서 정보 수정</h3>
 		<div>
-			<label for="eid">사원번호</label>
-			<input type="number" id="eid" th:field="*{employeeId}" readonly>
+			<label for="did">부서 번호</label>
+			<input type="number" id="did" th:value="${dept.departmentId}">
 		</div>
 		<div>
-			<label for="ename">이름</label> <input type="text" id="ename"
-				th:field="*{lastName}">
+			<label for="dname">부서 이름</label>
+			<input type="text" id="dname" th:value="${dept.departmentName}">
 		</div>
 		<div>
-			<label for="email">이메일</label> <input type="email" id="email"
-				th:field="*{email}">
+			<label for="mid">매니저 ID</label>
+			<input type="number" id="mid" th:value="${dept.managerId}">
 		</div>
 		<div>
-			<label for="hDate">입사일</label> <input type="date" id="hDate"
-				th:field="*{hireDate}" readonly>
-			<!-- input에 값을 출력할 때에는 VO에 설정한대로 출력 -->
-		</div>
-		<div>
-			<label for="job">업무</label> <input type="text" id="job"
-				th:field="*{jobId}">
-		</div>
-		<div>
-			<label for="sal">급여</label> <input type="number" id="sal"
-				th:field="*{salary}">
+			<label for="lid">지역 번호</label>
+			<input type="number" id="lid" th:value="${dept.locationId}">
 		</div>
 		<div>
 			<button type="button" id="updateBtn">저장</button>
@@ -50,11 +37,12 @@
 		function upadateAjax() {
 			// 1) 보낼 데이터 가져오기
 			let dataObj = getFormData();
+			console.log("--------");
 			console.log(dataObj);		
 
 			// 2) ajax - jquery의 아작스
 			// 서버에 값을 넘겨주기 때문에 ResponseBody가 동작한다.
-			$.ajax('empUpdate', { 	// 접근하고자 하는 컨트롤러의 경로
+			$.ajax('deptUpdate', { 	// 접근하고자 하는 컨트롤러의 경로
 				type : 'post',      // method
 				contentType : 'application/json', // 서버에서 @RequestBody 형태일 때, 보낼 데이터의 타입
 				data : JSON.stringify(dataObj)	  // 서버에서 @RequestBody 형태일 때,
@@ -81,7 +69,7 @@
 				//console.log('value : ', tag.value);	
 				formObj[tag.name] = tag.value;
 			});
-			console.clear();
+			//console.clear();
 			console.log(formObj);
 			return formObj;
 		}

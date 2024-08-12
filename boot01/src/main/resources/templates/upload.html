@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>AJAX</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+	<div>
+		<input type="file" name="uploadFiles" multiple>
+		<button class="uploadBtn">upload</button>
+	</div>
+	<script>
+		$('.uploadBtn').on('click', function(event){
+			let formData = new FormData();// formData 통신을 위해 만들어진 클래스.
+			// 유사) jQuery.serializeArray();
+			// 1) <from/>태그 내부의 입력태그 정보를 한번에 받음
+			// 2) AJAX를 이용하여 'Content-type:multipart/form-data'를 보내는 경우
+			
+			let input = $(event.currentTarget).prev()[0];
+			let fileList = input.files; // input의 속성 중에 files를 통해서 데이터를 가져올 수 있다.
+			
+			for(let file of fileList){
+				formData.append(input.name, file);
+			}
+			
+			console.log(formData.get("uploadFiles")); // formData는 console.log로 정보를 볼 수 없기 때문에 get을 통해서 원하는 정보를 볼 수 있다
+			
+			// fetch = 컨텐트 타입을 변경하지 않아도 되낟. formData 자체가 통신을 위해 기본적으로 세팅되어 있는 게 없기 때문에 훨씬 쉽다. 자동으로 멀티파으로 변환해서 보낸다.
+			fetch('uploadsAjax', {
+				method : 'post',
+				body : formData
+			})
+			.then(res => res.json())
+			.then(result => {
+				console.log(result);
+			})
+			.catch(err => console.log(err));
+			
+			// jQuery ajax = contentType을 보내기 위해서 기본적으로 세팅되어 있기 때문에 까다롭다. 기본 설정이 QueryString으로 되어 있기 때문에 formData로 보내기 위해선 기본 설정을 무력화 시켜야 한다.
+			$.ajax('uploadsAjax',{
+				type : 'post',				
+				data : formData,     // data 속성의 값(객체 타입)을
+				processData : false, // QueryString으로 변환하는 설정
+				contentType : false  // 기본 contentType을 사용하지 않겠다고 설정
+			})
+			.done(result => {
+				for (let image of result){
+					let imgTag = `<img src='/yedam/images/${image}' style="width : 50%;">`;
+					$('div').append(imgTag);
+				}
+			})
+			.fail(err => console.log(err));
+		});
+		
+	</script>
+</body>
+</html>

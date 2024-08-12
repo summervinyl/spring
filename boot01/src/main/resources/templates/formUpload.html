@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Form 방식</title>
+</head>
+<body>
+	<form th:action="@{/uploadForm}" method="post" enctype="multipart/form-data">
+	<!-- 컨텐트 타입이 multipart/form-data면 내부에 파일정보가 들어가있는 request : multipartResolver(인터페이스)를 구현하는 클래스 -->
+	<!-- method는 method,인코딩 방식이 반드시 multipart/form-data여야 한다. -->
+		<input type="file" name="files" multiple="multiple" >
+		<!-- multiple="multiple" : 하나의 인풋태그로 여러개를 넘긴다. /배열로 넘기기 때문에 넘어오는 매개변수가 배열로 받아야 동시처리가 가능 / 파일을 하나만 수정하고 싶을 때 모두 수정해야 된다-->
+		<!-- 다중 업로드 : multiple or input이 동적으로 늘어나게 하기  -->
+		<button type="submit">저장</button>
+	
+	</form>
+</body>
+</html>

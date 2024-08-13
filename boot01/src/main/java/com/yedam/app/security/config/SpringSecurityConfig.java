@@ -26,26 +26,27 @@ public class SpringSecurityConfig {
 	}
 
 	// 인증 및 인가 - 시큐리티 필터 체인 적용
-	// 람다식 표현 - 자바 / 부트 3버전
+	// 람다식 표현 - 자바 / 부트 3버전 / lambda DSL
 	// 버전에 따라 차이가 있으니 주의해서 코딩하기.
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		// Security가 적용될 URI
-		http.authorizeHttpRequests((authrize)
+		http.authorizeHttpRequests((authrize) //authrize - 매개변수
 				-> authrize
-				.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-				.requestMatchers("/", "/all").permitAll()
-				.requestMatchers("/user/**").hasAnyRole("USER", "ADMIN") //hasRole("USER") 하나의 접근 권한 추가, hasAnyRole- 여려개 중 최소 하나의 권한만 있어도 됨
-																		 //user 페이지에 admin도 권한 주면 admin으로 로그인 후 user페이지 접근 가능!
+				.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()	// requestMatchers : url 패턴
+				.requestMatchers("/", "/all").permitAll()					
+				.requestMatchers("/user/**").hasAnyRole("USER", "ADMIN") //hasRole("USER") 하나의 접근 권한 추가, hasAnyRole- 여려개 중 최소 하나의 권한만 있어도 됨, user 페이지에 admin도 권한 주면 admin으로 로그인 후 user페이지 접근 가능!
+				// 위에서부터 순차적으로 필터링하기 때문에 경로 유의해서 작성 - ex) /**가 맨 위에 있으면 밑에 작성된 경로는 무효가 된다.
 				.requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
 				.anyRequest().authenticated()
-		)
+		) // formLogin, logout을 명시해주어야 한다.
 		.formLogin(formlogin -> formlogin
 				.defaultSuccessUrl("/all"))
 		.logout(logout -> logout
 				.logoutSuccessUrl("/all")
-				.invalidateHttpSession(true));
+				.invalidateHttpSession(true)); //invalidateHttpSession - 로그아웃과 동시에 세션(토큰)을 파괴 여부 설정
 		
+		http.csrf(csrf ->  csrf.disable());
 		return http.build();
 	}
 	

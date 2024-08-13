@@ -1,18 +1,33 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 <meta charset="UTF-8">
+<!-- <meta name="_csrf" th:value="${_csrf.token}"> -->
 <title>all.html</title>
 </head>
 <body>
 	<h1>메인 페이지입니다.</h1>
 	<ul>
-		<li><a th:href="@{/user}">일반 사용자용 페이지로</a></li>
-		<li><a th:href="@{/admin}">관리자 전용 페이지로</a></li>
+		<li>
+			<a th:href="@{/user}">일반 사용자용 페이지로</a>
+		</li>
+		<li sec:authorize="hasRole('ADMIN')">
+			<a th:href="@{/admin}">관리자 전용 페이지로</a>
+		</li>
 	</ul>
-	<!-- 로그아웃 페이지는 기본적으로 제공 -->
-	<form th:action="@{/logout}" method="post">
-		<button type="submit">로그아웃</button>
-	</form>
+	<!-- isAuthenticated() : 권한 체크 / authentication : 인증 정보 -->
+	<!-- p 태그 : 인증된 사용자의 정보 -->
+	<!-- 인증 받았을 때만 아래 태그가 생성된다. -->
+	<th:block sec:authorize="isAuthenticated()"> <!-- 인증만 되어있으면 허락한다. -->
+		<p sec:authentication="name"></p>
+		<p sec:authentication="principal.username"></p>
+		<p sec:authentication="principal.authorities"></p>
+	
+		<!-- 로그아웃 페이지는 기본적으로 제공 -->
+		<form th:action="@{/logout}" method="post">
+			<button type="submit">로그아웃</button>
+		</form>
+	</th:block>
 </body>
 </html>

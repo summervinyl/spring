@@ -13,6 +13,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter //회원정보 클래스와 정보전달 클래스 분리할 시엔 @Data 어노테이션 사용 금지, 세터 이용 금지
+// @Getter = 필요할 ㄸㅐ UserVO를 겟할 수 있게 하기.......
 public class LoginUserVO implements UserDetails{
 	
 	private UserVO userVO;
@@ -22,7 +23,8 @@ public class LoginUserVO implements UserDetails{
 	// GrantedAuthority 인터페이스를 상속
 	// extends제한을 거는 것 : GrantedAuthority를 상속한 것 중 하나
 	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
+	//public Collection<? super GrantedAuthority> getAuthorities() { // super = 상위, 자신과 자신의 부모에 대해서만 값을 받겠다.
+	public Collection<? extends GrantedAuthority> getAuthorities() { // ? = 제네릭 타입을 사용하겠다. / extends ~ = ? 타입에 대한 제한을 걸겠다. | interface = GrantedAuthority 
 		List<GrantedAuthority> auths = new ArrayList<>();
 		auths.add(new SimpleGrantedAuthority(userVO.getRoleName()));
 		return auths;

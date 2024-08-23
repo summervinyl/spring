@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{common/layouts/default_layout}"
+	  layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<title>Board Insert</title>
+</head>
+<body>
+	<div class="container text-center">
+		<form name="insertBoard" th:action="@{/boardInsert}" method="post">
+			<h3>게시글 등록</h3>
+			<table class="table">
+				<tr>
+					<th>제목</th>
+					<td><input type="text" name="title"></td>
+				</tr>
+				<tr>
+					<th>내용</th>
+					<td><textarea name="contents"></textarea></td>
+				</tr>
+				<tr>
+					<th>작성자</th>
+					<td><input type="text" name="writer"></td>
+				</tr>
+				<tr>
+					<th>작성일</th>
+					<td><input type="text" name="regdate" placeholder="yyyy/MM/dd"></td>
+				</tr>
+				<tr>
+					<th>첨부파일</th>
+					<!-- 파일명만 입력 받는다 -->
+					<td><input type="text" name="image"></td>
+				</tr>
+			</table>
+			<button type="submit" class="btn btn-light">등록</button>
+		</form>
+	</div>
+	<script>
+		//$('button').on('click', insertHandler);
+		$('form[name="insertBoard"]').on('submit', insertHandler);	
+		
+		function insertHandler() {
+			//event.preventDefault();
+			
+			let title = $('input[name="title"]');
+			//console.log(title.val());
+			
+			if (title.val() == '') {
+				alert('제목을 입력해주세요.');
+				title.focus();
+				return;
+			}
+			
+			let contents = $('input[name="contents"]');
+			
+			if (contents.val() == '') {
+				alert('내용을 입력해주세요.');
+				contents.focus();
+				return;
+			}
+			
+			let writer = $('input[name="writer"]');
+			
+			if (writer.val() == '') {
+				alert('내용을 입력해주세요.');
+				writer.focus();
+				return;
+			}
+			
+			let regdate = $('input[name="regdate"]');
+			
+			if (regdate.val() == '') {
+				alert('작성일을 입력해주세요.');
+				regdate.focus();
+				return;
+			}
+			
+			let image = $('input[name="image"]');
+			
+			if (image.val() == '') {
+				alert('첨부파일을 입력해주세요.');
+				image.focus();
+				return;
+			}
+			
+			insertBoard.submit();
+			
+		}		
+	</script>
+</body>
+</html>

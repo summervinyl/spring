@@ -1,6 +1,5 @@
 package com.yedam.app.board.web;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +27,7 @@ public class BoardController {
 
 	// 전체조회 : URI - boardList / RETURN - board/boardList
 	@GetMapping("boardList")
-	private String boardList(Model model) { // Model 스프링 프레임 워크가 제공하는 객체
+	public String boardList(Model model) { // Model 스프링 프레임 워크가 제공하는 객체
 		List<BoardVO> BoardList = boardService.boardList();
 		model.addAttribute("boards", BoardList); // ("사용할 변수명", 페이지에서 사용할 데이터)
 
@@ -39,7 +38,7 @@ public class BoardController {
 	// 단건조회 : URI - boardInfo / PARAMETER - BoardVO(QueryString)
 	// RETURN - board/boardInfo
 	@GetMapping("boardInfo")
-	private String boardInfo(BoardVO boardVO, Model model) {
+	public String boardInfo(BoardVO boardVO, Model model) {
 		BoardVO getBoard = boardService.boardInfo(boardVO);
 
 		model.addAttribute("board", getBoard);

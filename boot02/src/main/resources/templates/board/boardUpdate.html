@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{common/layouts/default_layout}"
+	layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<title>Board Update</title>
+</head>
+<body>
+	<div class="container text-center">
+		<form name="updateBoard">
+			<h3 style="font-family: 돋움">게시글 수정</h3>
+			<table class="table">
+				<tr>
+					<th>번호</th>
+					<td><input type="text" name="bno" th:value="${board.bno}" readonly></td>
+				</tr>
+				<tr>
+					<th>제목</th>
+					<td><input type="text" name="title" th:value="${board.title}"></td>
+				</tr>
+				<tr>
+					<th>내용</th>
+					<td><textarea name="contents" th:text="${board.contents}"></textarea></td>
+				</tr>
+				<tr>
+					<th>작성자</th>
+					<td><input type="text" name="writer" th:value="${board.writer}"></td>
+				</tr>
+				<tr>
+					<th>첨부파일</th>
+					<td><input type="text" name="image" th:value="${board.image}"></td>
+				</tr>
+			</table>
+			<button type="button" id="updateBtn" class="btn btn-light">저장</button>
+		</form>
+	</div>
+	<script>
+		$('#updateBtn').on('click', updateHandler);
+		
+		function updateHandler(){
+			console.log('클릭되네.');
+			
+			// 1) 보낼 데이터 가져오기
+			let updateData = getFormData();			
+			
+			// 2) ajax - jquery 아작스
+			$.ajax('boardUpdate', {
+				type : 'post',
+				contentType : 'application/json',
+				data : JSON.stringify(updateData)
+			})
+			.done(data => {
+				if (data.result) {
+					alert('정상적으로 수정되었습니다.');
+				} else {
+					alert('수정되지 않았습니다.');
+				}
+			})
+			.fail(err => console.log(err));
+		} // end of updateHandler
+		
+		
+		function getFormData() {
+			let setArray = $('form[name="updateBoard"]').serializeArray();
+			
+			let setObj = {};
+			$.each(setArray, function(idx, ele) {
+				setObj[ele.name] = ele.value;
+			});
+			
+			console.log(setObj);
+			return setObj;
+		} // end of getFormData
+	</script>
+</body>
+</html>

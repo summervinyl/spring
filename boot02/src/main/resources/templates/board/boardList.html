@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{common/layouts/default_layout}"
+	  layout:fragment="Content">
+<head>
+<meta charset="UTF-8">
+<meta name="contextPath" th:value="${contextPath}">
+<title>Board List</title>
+</head>
+<body>
+	<div class="container text-center">
+		<h3>게시판 목록</h3>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>번호</th>
+					<th>제목</th>
+					<th>작성자</th>
+					<th>작성일</th>
+				</tr>
+			</thead>
+			<tbody>
+				<th:block th:each="board : ${boards}">
+					<tr>
+						<td th:text="${board.bno}"></td>
+						<td th:text="${board.title}"></td>
+						<td th:text="${board.writer}"></td>
+						<td th:text="${#dates.format(board.regdate, 'yyyy년 MM월 dd일')}"></td>
+					</tr>				
+				</th:block>
+			</tbody>			
+		</table>
+	</div>
+	
+	<script>
+		const context = $('meta[name="contextPath"]').attr('value');
+		$('tbody > tr').on('click', function(evetnt) {
+			//let tr = event.currentTarget;
+			//console.log(tr);
+			//let bno = $(tr).children().eq(0).text();
+			//let url = context + '/boardInfo?bno=' + bno;
+			let bno = $(event.currentTarget).children().eq(0).text();
+			let url = `${context}/boardInfo?bno=${bno}`; // 템플릿 문법
+			location.href = url;
+		});
+	</script>
+</body>
+</html>
